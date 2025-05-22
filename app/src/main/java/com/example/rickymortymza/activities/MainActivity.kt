@@ -42,6 +42,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun searchCharacter(query: String) {
+        //Codigo antes de la llamada a internet
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val service = CharacterService.getInstance()

@@ -3,7 +3,6 @@ package com.example.rickymortymza.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Adapter
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -21,7 +20,7 @@ class CharacterAdapter(private var characters: List<Character>) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_character, parent, false) // Asegúrate que item_character exista
+            .inflate(R.layout.item_character, parent, false)
         return CharacterViewHolder(view)
     }
 
@@ -40,7 +39,5 @@ class CharacterAdapter(private var characters: List<Character>) :
     fun updateItems(newCharacters: List<Character>) {
         this.characters = newCharacters // Reemplaza la lista actual con la nueva
         notifyDataSetChanged() // Notifica al RecyclerView que los datos han cambiado por completo
-        // Considera usar DiffUtil.Callback para animaciones más suaves en listas grandes.
-        // Pero para una solución rápida, notifyDataSetChanged() es suficiente.
     }
 }
