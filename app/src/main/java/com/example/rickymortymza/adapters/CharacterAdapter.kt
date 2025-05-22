@@ -30,9 +30,6 @@ class CharacterAdapter(private var characters: List<Character>) :
         holder.nameTextView.text = character.name
         Picasso.get().load(character.image).into(holder.imageView)
         // Aquí podrías cargar la imagen si tu Character tiene una URL de imagen,
-        // usando una librería como Glide o Picasso
-        // Ejemplo (requiere librerías de carga de imágenes):
-        // Glide.with(holder.imageView.context).load(character.imageUrl).into(holder.imageView)
     }
 
     override fun getItemCount(): Int {
