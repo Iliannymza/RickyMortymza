@@ -1,43 +1,53 @@
 package com.example.rickymortymza.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.rickymortymza.R
 import com.example.rickymortymza.data.Character
+import com.example.rickymortymza.databinding.ItemCharacterBinding
 import com.squareup.picasso.Picasso
 
-class CharacterAdapter(private var characters: List<Character>) :
-    RecyclerView.Adapter<CharacterAdapter.CharacterViewHolder>() {
+class CharacterAdapter(
+    private val characters: MutableList<Character>, // Lista mutable de personajes que el adaptador mostrará
+    private val onItemClick: (Character) -> Unit
+) : RecyclerView.Adapter<CharacterAdapter.CharacterViewHolder>() {
 
-    class CharacterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val nameTextView: TextView = itemView.findViewById(R.id.characterNameTextView)
-        val imageView: ImageView = itemView.findViewById(R.id.characterImageView)
-    }
+    class CharacterViewHolder(val binding: ItemCharacterBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_character, parent, false)
-        return CharacterViewHolder(view)
+        val binding = ItemCharacterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return CharacterViewHolder(binding)
     }
 
+    // Se llama para mostrar los datos en una posición específica.
+    // Aquí es donde "rellenamos" las vistas con la información del personaje.
     override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
         val character = characters[position]
-        holder.nameTextView.text = character.name
-        Picasso.get().load(character.image).into(holder.imageView)
-        // Aquí podrías cargar la imagen si tu Character tiene una URL de imagen,
+
+        holder.binding.apply { // Usamos apply para acceder a las vistas del binding directamente
+            textViewName.text = character.name
+            textViewStatusSpecies.text = "${character.status} - ${character.species}"
+
+            // *** Carga la imagen con Picasso ***
+            Picasso.get()
+                .load(character.image)
+                .placeholder(android.R.drawable.sym_def_app_icon)
+                .error(android.R.drawable.ic_menu_close_clear_cancel)
+                .into(imageViewCharacter)
+
+            root.setOnClickListener {
+                onItemClick(character) // Llama a la función lambda que se pasó al adaptador
+            }
+        }
     }
 
-    override fun getItemCount(): Int {
-        return characters.size
-    }
+    // Retorna el número total de elementos en la lista
+    override fun getItemCount(): Int = characters.size
 
-    // *** ESTA ES LA CLAVE DE LA SOLUCIÓN ***
-    fun updateItems(newCharacters: List<Character>) {
-        this.characters = newCharacters // Reemplaza la lista actual con la nueva
-        notifyDataSetChanged() // Notifica al RecyclerView que los datos han cambiado por completo
+    //Metodo para actualizar la lista de personajes y actualizar el recyclerview
+    fun updateCharacters(newCharacters: List<Character>) {
+        characters.clear() // Limpia la lista existente
+        characters.addAll(newCharacters) // Añade los nuevos personajes
+        notifyDataSetChanged() // Notifica al adaptador que los datos han cambiado para que se redibuje
     }
 }

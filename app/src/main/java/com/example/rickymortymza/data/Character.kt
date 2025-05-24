@@ -1,34 +1,36 @@
 package com.example.rickymortymza.data
 
+import com.google.gson.annotations.SerializedName
+
 data class CharacterResponse(
-    val info: Info,
-    val results: List<Character>
+    @SerializedName("info") val info: Info,
+    @SerializedName("results") val results: List<Character>
 )
 
 data class Info(
-    val count: Int,
-    val pages: Int,
-    val next: String,
-    val prev: String
+    @SerializedName("count") val count: Int,
+    @SerializedName("pages") val pages: Int,
+    @SerializedName("next") val next: String?,
+    @SerializedName("prev") val prev: String?
 )
 // Para personajes individuales
 data class Character(
-    val id: Int,
-    val name: String,
-    val status: String,
-    val species: String,
-    val type: String,
-    val gender: String,
-    val origin: Location,
-    val location: Location,
-    val image: String,
-    val episode: List<String>,
-    val url: String,
-    val created: String
+    @SerializedName("id") val id: Int,
+    @SerializedName("name") val name: String,
+    @SerializedName("status") val status: String,
+    @SerializedName("species") val species: String,
+    @SerializedName("type") val type: String,
+    @SerializedName("gender") val gender: String,
+    @SerializedName("origin") val origin: Location,
+    @SerializedName("location") val location: Location,
+    @SerializedName("image") val image: String,
+    @SerializedName("episode") val episode: List<String>,
+    @SerializedName("url") val url: String,
+    @SerializedName("created") val created: String
 )
 
 //para las ubicaciones (origin y location)
 data class Location(
-    val name: String,
-    val url: String
+    @SerializedName("name") val name: String,
+    @SerializedName("url") val url: String
 )

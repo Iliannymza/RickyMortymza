@@ -1,67 +1,62 @@
 package com.example.rickymortymza.activities
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.rickymortymza.R
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rickymortymza.adapters.CharacterAdapter
-import com.example.rickymortymza.utils.CharacterService
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import com.example.rickymortymza.databinding.ActivityMainBinding
+import com.example.rickymortymza.utils.managerservice.CharacterRepository
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var recyclerView: RecyclerView
-    lateinit var adapter: CharacterAdapter
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var characterAdapter: CharacterAdapter
+    private val characterRepository = CharacterRepository()
+    private val characterList = mutableListOf<com.example.rickymortymza.data.Character>() //Fue la solucion que consegui ya que kotlin me daba error por la palabra character en java
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        setupRecyclerView()
+        fetchCharacters()
         }
 
-        recyclerView = findViewById(R.id.recyclerView)
+    private fun setupRecyclerView() {
+        // Inicializa el adaptador, pasándole la lista vacía y una funcion de click
+        characterAdapter = CharacterAdapter(characterList) { character ->
 
-
-        adapter = CharacterAdapter(emptyList())
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = GridLayoutManager(this, 2)
-
-        searchCharacter("a")
+            Toast.makeText(this, "click en: ${character.name}", Toast.LENGTH_SHORT).show()
+        }
+        //Se configura el recyclerview
+            binding.recyclerViewCharacters.apply {
+            layoutManager = LinearLayoutManager(this@MainActivity)
+            adapter = characterAdapter
+        }
     }
 
-    fun searchCharacter(query: String) {
-        //Codigo antes de la llamada a internet
-        CoroutineScope(Dispatchers.IO).launch {
+    private fun fetchCharacters() {
+        // Usa lifecycleScope.launch para iniciar una corrutina de forma segura
+        lifecycleScope.launch {
             try {
-                val service = CharacterService.getInstance()
-                val response = service.findCharacterByName(query)
+                // Llama a tu repositorio para obtener los personajes de la página 1
+                val response = characterRepository.getAllCharacter(1) // Obtiene la primera página
 
-                withContext(Dispatchers.Main) {
-                    println(response.results)
-                    adapter.updateItems(response.results)
+                if (response.isSuccessful && response.body() != null) {
+                    val characters = response.body()!!.results
+                    characterAdapter.updateCharacters(characters)
+                } else {
+                    Toast.makeText(this@MainActivity, "Error al cargar personajes: ${response.message()}", Toast.LENGTH_LONG).show()
+                    Log.e("MainActivity", "Error API: ${response.code()} - ${response.message()}")
                 }
-
             } catch (e: Exception) {
-                e.printStackTrace()
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(
-                        this@MainActivity,
-                        "Error al cargar personajes: ${e.message}",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
+                Toast.makeText(this@MainActivity, "Error de red: ${e.message}", Toast.LENGTH_LONG).show()
+                Log.e("MainActivity", "Excepción: ${e.message}", e)
             }
         }
     }
