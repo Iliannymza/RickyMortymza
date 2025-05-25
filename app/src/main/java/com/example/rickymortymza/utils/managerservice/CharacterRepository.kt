@@ -8,7 +8,7 @@ import retrofit2.Response
 class CharacterRepository {
     private val apiService: RickAndMortyApiService = RetrofitClient.instance
 
-    suspend fun getAllCharacter(page: Int): Response<CharacterResponse> {
+    suspend fun getAllCharacters(page: Int): Response<CharacterResponse> {
         return apiService.getAllCharacters(page)
     }
 
