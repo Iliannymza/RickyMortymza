@@ -8,33 +8,46 @@
 
     <ImageView
         android:id="@+id/detailImageViewCharacter"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_marginTop="32dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@tools:sample/avatars" />
 
+    <ProgressBar
+        android:id="@+id/detailImageProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@id/detailImageViewCharacter"
+        app:layout_constraintEnd_toEndOf="@id/detailImageViewCharacter"
+        app:layout_constraintStart_toStartOf="@id/detailImageViewCharacter"
+        app:layout_constraintTop_toTopOf="@id/detailImageViewCharacter" />
+
     <TextView
         android:id="@+id/detailTextViewName"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:textSize="24sp"
         android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/detailImageViewCharacter"
-        tools:text="Morty Smith" />
+        tools:text="Rick Sanchez" />
 
     <TextView
         android:id="@+id/detailTextViewStatusSpecies"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:textSize="18sp"
+        android:textColor="@android:color/darker_gray"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/detailTextViewName"
@@ -42,13 +55,14 @@
 
     <TextView
         android:id="@+id/detailTextViewGender"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:textSize="18sp"
+        android:textColor="@android:color/darker_gray"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/detailTextViewStatusSpecies"
         tools:text="Male" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

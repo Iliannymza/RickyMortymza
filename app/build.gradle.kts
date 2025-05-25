@@ -48,6 +48,8 @@ dependencies {
 
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
+    implementation ("androidx.core:core-splashscreen:1.0.1") // O la versión más reciente disponible
+
     //Picasso
     implementation("com.squareup.picasso:picasso:2.8")
 
