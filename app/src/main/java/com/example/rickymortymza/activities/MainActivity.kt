@@ -4,11 +4,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
-import android.widget.SearchView
-import android.widget.SearchView.OnQueryTextListener
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.appcompat.widget.SearchView
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rickymortymza.R
 import com.example.rickymortymza.adapters.CharacterAdapter
@@ -28,17 +28,24 @@ class MainActivity : AppCompatActivity() {
     private lateinit var characterRepository: CharacterRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
 
         characterRepository = CharacterRepository()
 
        characterAdapter = CharacterAdapter(characterList) { character ->
            val intent = Intent(this, CharacterDetailActivity::class.java).apply {
-               putExtra("character_id", character.id)
+               putExtra("character_id", character.apiid)
                putExtra("character_name", character.name)
                putExtra("character_status", character.status)
                putExtra("character_species", character.species)
@@ -58,7 +65,7 @@ class MainActivity : AppCompatActivity() {
 
         val  menuItem = menu.findItem(R.id.menu_search)
         val searchView = menuItem.actionView as SearchView
-        searchView.setOnQueryTextListener(object : OnQueryTextListener {
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 searchCharacters(query)
                 return true

@@ -10,12 +10,14 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp">
+        android:padding="10dp">
 
         <ImageView
             android:id="@+id/imageViewCharacter"
             android:layout_width="96dp"
             android:layout_height="96dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
             android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -27,16 +29,16 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="@android:color/black"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:textColor="@android:color/black"
-            app:layout_constraintStart_toEndOf="@id/imageViewCharacter"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imageViewCharacter"
             app:layout_constraintTop_toTopOf="@id/imageViewCharacter"
             app:layout_constraintVertical_chainStyle="packed"
-            tools:text="Rick Sanchez"
-            android:maxLines="2"
-            android:ellipsize="end" />
+            tools:text="Rick Sanchez" />
 
         <TextView
             android:id="@+id/textViewStatusSpecies"
@@ -45,10 +47,10 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="8dp"
-            android:textSize="14sp"
             android:textColor="@android:color/darker_gray"
-            app:layout_constraintStart_toEndOf="@id/imageViewCharacter"
+            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imageViewCharacter"
             app:layout_constraintTop_toBottomOf="@id/textViewName"
             tools:text="Alive - Human" />
 
@@ -59,10 +61,10 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="8dp"
-            android:textSize="14sp"
             android:textColor="@android:color/darker_gray"
-            app:layout_constraintStart_toEndOf="@id/imageViewCharacter"
+            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imageViewCharacter"
             app:layout_constraintTop_toBottomOf="@id/textViewStatusSpecies"
             tools:text="Male" />
 

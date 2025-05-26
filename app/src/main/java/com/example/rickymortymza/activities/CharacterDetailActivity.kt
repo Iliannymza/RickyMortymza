@@ -2,7 +2,10 @@ package com.example.rickymortymza.activities
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.example.rickymortymza.databinding.ActivityCharacterDetailBinding
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
@@ -13,8 +16,16 @@ class CharacterDetailActivity: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+
         binding = ActivityCharacterDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
 
         val characterId = intent.getIntExtra("character_id", -1)
         val  characterName = intent.getStringExtra("character_name") ?: "Nombre Desconocido"
