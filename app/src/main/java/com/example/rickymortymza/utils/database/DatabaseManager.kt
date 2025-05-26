@@ -35,7 +35,5 @@ class DatabaseManager(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
     private fun onDestroy(db :SQLiteDatabase){
         db.execSQL(SQL_DELETE_CHARACTERS)
     }
-
-
 }
 
