@@ -4,7 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.util.Log
-import com.example.rickymortymza.utils.database.DatabaseManager
+import com.example.rickymortymza.utils.DatabaseManager
 
 class CharacterDao(private val context: Context) {
     // base de datos seguir a mansour

@@ -14,7 +14,7 @@ import com.example.rickymortymza.R
 import com.example.rickymortymza.adapters.CharacterAdapter
 import com.example.rickymortymza.data.Character
 import com.example.rickymortymza.databinding.ActivityMainBinding
-import com.example.rickymortymza.utils.managerservice.CharacterRepository
+import com.example.rickymortymza.utils.CharacterRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

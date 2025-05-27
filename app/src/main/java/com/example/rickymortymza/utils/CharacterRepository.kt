@@ -1,8 +1,7 @@
-package com.example.rickymortymza.utils.managerservice
+package com.example.rickymortymza.utils
 
 import com.example.rickymortymza.data.CharacterResponse
 import com.example.rickymortymza.data.remote.RickAndMortyApiService
-import com.example.rickymortymza.utils.network.RetrofitClient
 import retrofit2.Response
 
 class CharacterRepository {

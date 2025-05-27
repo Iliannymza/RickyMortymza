@@ -6,6 +6,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.rickymortymza.data.CharacterDao
 import com.example.rickymortymza.databinding.ActivityCharacterDetailBinding
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
@@ -13,6 +14,8 @@ import com.squareup.picasso.Picasso
 class CharacterDetailActivity: AppCompatActivity() {
 
     private lateinit var binding: ActivityCharacterDetailBinding
+
+    lateinit var characterDao: CharacterDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +29,8 @@ class CharacterDetailActivity: AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        characterDao = CharacterDao(this)
 
         val characterId = intent.getIntExtra("character_id", -1)
         val  characterName = intent.getStringExtra("character_name") ?: "Nombre Desconocido"
