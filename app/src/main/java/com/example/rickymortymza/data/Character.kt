@@ -20,7 +20,12 @@ data class Character(
     @SerializedName("status") val status: String,
     @SerializedName("species") val species: String,
     @SerializedName("gender") val gender: String,
-    @SerializedName("image") val image: String
+    @SerializedName("image") val image: String,
+    @SerializedName("type") val type: String,
+    @SerializedName("origin") val origin: Location?,
+    @SerializedName("location") val location: Location?,
+    @SerializedName("episode") val episode: List<String>,
+    @SerializedName("url") val url: String?
 ) {
     companion object {
         const val TABLE_NAME = "Characters"
@@ -31,6 +36,11 @@ data class Character(
         const val COLUMN_NAME_SPECIES = "species"
         const val COLUMN_NAME_GENDER = "gender"
         const val COLUMN_NAME_IMAGE = "image"
+        const val COLUMN_NAME_TYPE = "type"
+        const val COLUMN_NAME_ORIGIN = "origin"
+        const val COLUMN_NAME_LOCATION = "location"
+        const val COLUMN_NAME_EPISODE = "episode"
+        const val COLUMN_NAME_URL = "url"
     }
 }
 

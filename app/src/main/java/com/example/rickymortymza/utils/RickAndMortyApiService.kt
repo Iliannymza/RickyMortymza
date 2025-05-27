@@ -1,4 +1,4 @@
-package com.example.rickymortymza.data.remote
+package com.example.rickymortymza.utils
 
 import com.example.rickymortymza.data.Character
 import com.example.rickymortymza.data.CharacterResponse
@@ -18,4 +18,7 @@ interface RickAndMortyApiService {
 
     @GET("character")
     suspend fun getAllCharacters(@Query("page") page: Int): Response<CharacterResponse>
+
+    @GET("episode")
+    suspend fun getAllEpisode(@Query("page") page: Int): Response<CharacterResponse>
 }

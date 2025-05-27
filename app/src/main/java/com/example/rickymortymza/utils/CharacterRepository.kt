@@ -1,7 +1,6 @@
 package com.example.rickymortymza.utils
 
 import com.example.rickymortymza.data.CharacterResponse
-import com.example.rickymortymza.data.remote.RickAndMortyApiService
 import retrofit2.Response
 
 class CharacterRepository {
@@ -16,6 +15,10 @@ class CharacterRepository {
     }
 
     suspend fun getCharacterById(id: Int): Response<com.example.rickymortymza.data.Character> {
+        return apiService.getCharacterById(id)
+    }
+
+    suspend fun getEpisodeById(id: Int): Response<com.example.rickymortymza.data.Character> {
         return apiService.getCharacterById(id)
     }
 }

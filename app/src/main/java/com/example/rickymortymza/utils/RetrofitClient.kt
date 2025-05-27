@@ -1,6 +1,5 @@
 package com.example.rickymortymza.utils
 
-import com.example.rickymortymza.data.remote.RickAndMortyApiService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

@@ -50,6 +50,12 @@ class MainActivity : AppCompatActivity() {
                putExtra("character_species", character.species)
                putExtra("character_gender", character.gender)
                putExtra("character_image", character.image)
+               putExtra("character_image", character.type)
+               putExtra("character_image", character.origin)
+               putExtra("character_image", character.location)
+               putExtra("character_image", character.episode)
+               putExtra("character_image", character.url)
+               putExtra("character_image", character.created)
            }
            startActivity(intent)
        }

@@ -37,6 +37,12 @@ class CharacterDetailActivity: AppCompatActivity() {
         val  characterStatus = intent.getStringExtra("character_status") ?: "Desconocido"
         val  characterSpecies = intent.getStringExtra("character_species") ?: "Desconocida"
         val  characterGender = intent.getStringExtra("character_gender") ?: "Desconocido"
+        val  characterType = intent.getStringExtra("character_image")
+        val  characterOrigin = intent.getStringExtra("character_image")
+        val  characterLocation = intent.getStringExtra("character_image")
+        val  characterEpisode = intent.getStringExtra("character_image")
+        val  characterUrl = intent.getStringExtra("character_image")
+        val  characterCreated = intent.getStringExtra("character_image")
         val  characterImage = intent.getStringExtra("character_image")
 
         binding.detailTextViewName.text = characterName
