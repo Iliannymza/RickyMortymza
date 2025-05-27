@@ -15,13 +15,24 @@ data class Info(
 )
 // Para personajes individuales
 data class Character(
-    @SerializedName("id") val apiid: Int,
+    @SerializedName("id") val id: Long,
     @SerializedName("name") val name: String,
     @SerializedName("status") val status: String,
     @SerializedName("species") val species: String,
     @SerializedName("gender") val gender: String,
     @SerializedName("image") val image: String
-)
+) {
+    companion object {
+        const val TABLE_NAME = "Characters"
+
+        const val COLUMN_NAME_ID = "id"
+        const val COLUMN_NAME_NAME = "name"
+        const val COLUMN_NAME_STATUS = "status"
+        const val COLUMN_NAME_SPECIES = "species"
+        const val COLUMN_NAME_GENDER = "gender"
+        const val COLUMN_NAME_IMAGE = "image"
+    }
+}
 
 //para las ubicaciones (origin y location)
 data class Location(
@@ -29,7 +40,7 @@ data class Location(
     @SerializedName("url") val url: String
 )
 
-data class CharactersTable (
+/*data class CharactersTable (
     val id: Long,
     val apiid: Int,
     val name: String,
@@ -49,4 +60,4 @@ data class CharactersTable (
         const val COLUMN_NAME_GENDER = "gender"
         const val COLUMN_NAME_IMAGE = "image"
     }
-}
+}*/

@@ -2,7 +2,6 @@ package com.example.rickymortymza.activities
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -13,19 +12,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rickymortymza.R
 import com.example.rickymortymza.adapters.CharacterAdapter
 import com.example.rickymortymza.data.Character
+import com.example.rickymortymza.data.CharacterDao
 import com.example.rickymortymza.databinding.ActivityMainBinding
-import com.example.rickymortymza.utils.CharacterRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var characterAdapter: CharacterAdapter
-    private var characterList: MutableList<Character> = mutableListOf()
+    private var characterList: List<Character> = listOf()
 
-    private lateinit var characterRepository: CharacterRepository
+
+    private lateinit var characterDao: CharacterDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,11 +39,12 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        characterRepository = CharacterRepository()
+        characterDao = CharacterDao(this)
+
 
        characterAdapter = CharacterAdapter(characterList) { character ->
            val intent = Intent(this, CharacterDetailActivity::class.java).apply {
-               putExtra("character_id", character.apiid)
+               putExtra("character_id", character.id)
                putExtra("character_name", character.name)
                putExtra("character_status", character.status)
                putExtra("character_species", character.species)
@@ -57,7 +56,7 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerViewCharacters.layoutManager = LinearLayoutManager(this)
         binding.recyclerViewCharacters.adapter = characterAdapter
 
-        searchCharacters("a")
+        searchCharacters("")
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -67,46 +66,19 @@ class MainActivity : AppCompatActivity() {
         val searchView = menuItem.actionView as SearchView
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-                searchCharacters(query)
-                return true
+                return false
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                if (newText.isEmpty()) {
-                    searchCharacters("a")
-                }
-                return false
+                searchCharacters(newText)
+                return true
             }
         })
         return true
     }
 
     fun searchCharacters(query: String) {
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val response = characterRepository.findCharactersByName(query)
-                if (response.isSuccessful && response.body() != null) {
-                    //characterList = response.body()!!.results
-                    characterList.clear()
-                    characterList.addAll(response.body()!!.results)
-
-                    Log.d("MainActivity", "Número de personajes encontrados: ${characterList.size}")
-                } else {
-                    characterList.clear()
-                    Log.e("MainActivity", "Error al buscar personajes: ${response.code()}")
-                }
-
-                CoroutineScope(Dispatchers.Main).launch {
-                    characterAdapter.updateItems(characterList)
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                Log.e("MainActivity", "Excepción en searchCharacters: ${e.message}")
-                CoroutineScope(Dispatchers.Main).launch {
-                    characterList = mutableListOf()
-                    characterAdapter.updateItems(characterList)
-                }
-            }
-        }
+        characterList = characterDao.findAllByName(query)
+        characterAdapter.updateItems(characterList)
     }
 }

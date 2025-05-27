@@ -3,7 +3,7 @@ package com.example.rickymortymza.utils
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import com.example.rickymortymza.data.CharactersTable
+import com.example.rickymortymza.data.Character
 
 class DatabaseManager(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION  ){
     companion object {
@@ -11,16 +11,15 @@ class DatabaseManager(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
         const val DATABASE_VERSION = 1
 
         private const val SQL_CREATE_CHARACTERS =
-            "CREATE TABLE ${CharactersTable.TABLE_NAME} (" +
-                    "${CharactersTable.COLUMN_NAME_ID} INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "${CharactersTable.COLUMN_NAME_APIID} INTEGER," +
-                    "${CharactersTable.COLUMN_NAME_NAME} TEXT," +
-                    "${CharactersTable.COLUMN_NAME_STATUS} TEXT, " +
-                    "${CharactersTable.COLUMN_NAME_SPECIES} TEXT, " +
-                    "${CharactersTable.COLUMN_NAME_GENDER} TEXT, " +
-                    "${CharactersTable.COLUMN_NAME_IMAGE} TEXT)"
+            "CREATE TABLE ${Character.TABLE_NAME} (" +
+                    "${Character.COLUMN_NAME_ID} INTEGER PRIMARY KEY," +
+                    "${Character.COLUMN_NAME_NAME} TEXT," +
+                    "${Character.COLUMN_NAME_STATUS} TEXT, " +
+                    "${Character.COLUMN_NAME_SPECIES} TEXT, " +
+                    "${Character.COLUMN_NAME_GENDER} TEXT, " +
+                    "${Character.COLUMN_NAME_IMAGE} TEXT)"
 
-        private const val SQL_DELETE_CHARACTERS = "DROP TABLE IF EXISTS ${CharactersTable.TABLE_NAME}"
+        private const val SQL_DELETE_CHARACTERS = "DROP TABLE IF EXISTS ${Character.TABLE_NAME}"
     }
 
     override fun onCreate(db: SQLiteDatabase) {
