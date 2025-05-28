@@ -11,9 +11,13 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rickymortymza.R
 import com.example.rickymortymza.adapters.CharacterAdapter
+import com.example.rickymortymza.adapters.EpisodeAdapter
 import com.example.rickymortymza.data.Character
 import com.example.rickymortymza.data.CharacterDao
+import com.example.rickymortymza.data.Episode
+import com.example.rickymortymza.data.EpisodeDao
 import com.example.rickymortymza.databinding.ActivityMainBinding
+import com.google.android.material.tabs.TabLayout
 
 
 class MainActivity : AppCompatActivity() {
@@ -22,8 +26,14 @@ class MainActivity : AppCompatActivity() {
     private lateinit var characterAdapter: CharacterAdapter
     private var characterList: List<Character> = listOf()
 
+    private lateinit var episodeAdapter: EpisodeAdapter
+    private var episodeList: List<Episode> = listOf()
+
+    private var query = ""
 
     private lateinit var characterDao: CharacterDao
+
+    private lateinit var episodeDao: EpisodeDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,29 +50,61 @@ class MainActivity : AppCompatActivity() {
         }
 
         characterDao = CharacterDao(this)
+        episodeDao = EpisodeDao(this)
 
 
-       characterAdapter = CharacterAdapter(characterList) { character ->
-           val intent = Intent(this, CharacterDetailActivity::class.java).apply {
-               putExtra("character_id", character.id)
-               putExtra("character_name", character.name)
-               putExtra("character_status", character.status)
-               putExtra("character_species", character.species)
-               putExtra("character_gender", character.gender)
-               putExtra("character_image", character.image)
-               putExtra("character_image", character.type)
-               putExtra("character_image", character.origin)
-               putExtra("character_image", character.location)
-               putExtra("character_image", character.episode)
-               putExtra("character_image", character.url)
-               putExtra("character_image", character.created)
-           }
-           startActivity(intent)
-       }
+
+        characterAdapter = CharacterAdapter(characterList) { character ->
+            val intent = Intent(this, CharacterDetailActivity::class.java).apply {
+                putExtra("character_id", character.id)
+                putExtra("character_name", character.name)
+                putExtra("character_status", character.status)
+                putExtra("character_species", character.species)
+                putExtra("character_gender", character.gender)
+                putExtra("character_image", character.image)
+                //putExtra("character_image", character.type)
+                //putExtra("character_image", character.origin)
+                //putExtra("character_image", character.location)
+                //putExtra("character_image", character.url)
+            }
+            startActivity(intent)
+        }
         binding.recyclerViewCharacters.layoutManager = LinearLayoutManager(this)
         binding.recyclerViewCharacters.adapter = characterAdapter
 
-        searchCharacters("")
+        episodeAdapter = EpisodeAdapter(episodeList) { episode ->
+            val intent = Intent(this, CharacterDetailActivity::class.java).apply {
+                putExtra("character_id", episode.id)
+                putExtra("character_name", episode.name)
+                putExtra("character_image", episode.url)
+            }
+            startActivity(intent)
+        }
+
+        binding.tabBar.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                when (binding.tabBar.selectedTabPosition) {
+                    0 -> loadCharacters()
+                    1 -> loadEpisodes()
+                }
+                search()
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+        })
+
+        search()
+    }
+
+    private fun loadEpisodes() {
+        binding.recyclerViewCharacters.adapter = episodeAdapter
+    }
+
+    private fun loadCharacters() {
+        binding.recyclerViewCharacters.adapter = characterAdapter
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -76,15 +118,21 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                searchCharacters(newText)
+                query = newText
+                search()
                 return true
             }
         })
         return true
     }
 
-    fun searchCharacters(query: String) {
-        characterList = characterDao.findAllByName(query)
-        characterAdapter.updateItems(characterList)
+    fun search() {
+        if (binding.tabBar.selectedTabPosition == 0) {
+            characterList = characterDao.findAllByName(query)
+            characterAdapter.updateItems(characterList)
+        } else {
+            episodeList = episodeDao.findAllByName(query)
+            episodeAdapter.updateItems(episodeList)
+        }
     }
 }

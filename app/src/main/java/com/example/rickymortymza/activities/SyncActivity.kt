@@ -10,6 +10,8 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.rickymortymza.R
 import com.example.rickymortymza.data.Character
 import com.example.rickymortymza.data.CharacterDao
+import com.example.rickymortymza.data.Episode
+import com.example.rickymortymza.data.EpisodeDao
 import com.example.rickymortymza.databinding.ActivitySyncBinding
 import com.example.rickymortymza.utils.CharacterRepository
 import com.example.rickymortymza.utils.SessionManager
@@ -23,6 +25,7 @@ class SyncActivity : AppCompatActivity() {
     lateinit var binding: ActivitySyncBinding
 
     private var characterList: MutableList<Character> = mutableListOf()
+    private var episodesList: MutableList<Episode> = mutableListOf()
 
     private lateinit var characterRepository: CharacterRepository
 
@@ -48,7 +51,6 @@ class SyncActivity : AppCompatActivity() {
 
         if (session.getLastDownload() > Calendar.getInstance().timeInMillis - TIME_BETWEEN_DOWNLOAD) {
             goToHome()
-            finish()
             return
         }
 
@@ -69,6 +71,7 @@ class SyncActivity : AppCompatActivity() {
                     CoroutineScope(Dispatchers.Main).launch {
                         binding.progressIndicator.max = result.info.pages
                         binding.progressIndicator.progress = page
+                        binding.progressTextView.text = "Obteniendo personajes (${characterList.size}/${result.info.count})"
                     }
 
                     if (result.info.next != null) {
@@ -99,8 +102,60 @@ class SyncActivity : AppCompatActivity() {
 
         characterDao.deleteAll()
 
-        for (character in characterList) {
-            characterDao.insert(character)
+        for (index in characterList.indices) {
+            binding.progressTextView.text = "Guardando personajes (${index + 1}/${characterList.size})"
+            characterDao.insert(characterList[index])
+        }
+
+        downloadEpisodes()
+    }
+
+    fun downloadEpisodes(page: Int = 1) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = characterRepository.getAllEpisodes(page)
+                if (response.isSuccessful && response.body() != null) {
+                    //characterList = response.body()!!.results
+                    val result = response.body()!!
+                    episodesList.addAll(result.results)
+
+                    CoroutineScope(Dispatchers.Main).launch {
+                        binding.progressIndicator.max = result.info.pages
+                        binding.progressIndicator.progress = page
+                        binding.progressTextView.text = "Obteniendo episodios (${episodesList.size}/${result.info.count})"
+                    }
+
+                    if (result.info.next != null) {
+                        downloadEpisodes(page + 1)
+                    } else {
+                        saveEpisodesToDatabase()
+                    }
+
+                    Log.d("MainActivity", "Número de episodios encontrados: ${episodesList.size}")
+                } else {
+                    CoroutineScope(Dispatchers.Main).launch {
+
+                    }
+                    Log.e("MainActivity", "Error al buscar episodios: ${response.code()}")
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Log.e("MainActivity", "Excepción en searchEpisodes: ${e.message}")
+                CoroutineScope(Dispatchers.Main).launch {
+
+                }
+            }
+        }
+    }
+
+    fun saveEpisodesToDatabase() {
+        val episodeDao = EpisodeDao(this)
+
+        episodeDao.deleteAll()
+
+        for (index in episodesList.indices) {
+            binding.progressTextView.text = "Guardando episodios (${index + 1}/${episodesList.size})"
+            episodeDao.insert(episodesList[index])
         }
 
         session.setLastDownload(Calendar.getInstance().timeInMillis)
@@ -110,7 +165,7 @@ class SyncActivity : AppCompatActivity() {
 
     private fun goToHome() {
         val intent = Intent(this, MainActivity::class.java)
-
         startActivity(intent)
+        finish()
     }
 }

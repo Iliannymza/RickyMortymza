@@ -6,6 +6,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".activities.MainActivity">
 
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.tabs.TabItem
+            android:tag="0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Personajes" />
+
+        <com.google.android.material.tabs.TabItem
+            android:tag="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Episodios" />
+
+    </com.google.android.material.tabs.TabLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewCharacters"
@@ -16,7 +38,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tabBar"
         app:layout_constraintVertical_bias="1.0"
         tools:listitem="@layout/item_character" />
 
@@ -29,5 +51,42 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/textViewEpisodesHeader"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Episodios"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/recyclerViewCharacters" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewEpisodes"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewEpisodesHeader"
+        tools:listitem="@layout/item_episode" />
+
+    <ProgressBar
+        android:id="@+id/progressBarEpisodes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/recyclerViewEpisodes"
+        app:layout_constraintEnd_toEndOf="@+id/recyclerViewEpisodes"
+        app:layout_constraintStart_toStartOf="@+id/recyclerViewEpisodes"
+        app:layout_constraintTop_toTopOf="@+id/recyclerViewEpisodes"/>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

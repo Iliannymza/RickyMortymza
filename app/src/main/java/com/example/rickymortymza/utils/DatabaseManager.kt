@@ -22,18 +22,16 @@ class DatabaseManager(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
                     "${Character.COLUMN_NAME_TYPE} TEXT, " +
                     "${Character.COLUMN_NAME_ORIGIN} TEXT, " +
                     "${Character.COLUMN_NAME_LOCATION} TEXT, " +
-                    "${Character.COLUMN_NAME_EPISODE} TEXT, " +
                     "${Character.COLUMN_NAME_URL} TEXT)"
 
         private const val SQL_CREATE_EPISODES =
             "CREATE TABLE ${Episode.TABLE_NAME} (" +
-         "${Episode.COLUMN_NAME_ID} INTEGER PRIMARY KEY," +
-        "${Episode.COLUMN_NAME_NAME} TEXT," +
-        "${Episode.COLUMN_NAME_AIR_DATE} TEXT," +
-        "${Episode.COLUMN_NAME_EPISODE_CODE} TEXT," +
-        "${Episode.COLUMN_NAME_CHARACTERS} TEXT," +
-        "${Episode.COLUMN_NAME_URL} TEXT," +
-        "${Episode.COLUMN_NAME_CREATED} TEXT)"
+                    "${Episode.COLUMN_NAME_ID} INTEGER PRIMARY KEY," +
+                    "${Episode.COLUMN_NAME_NAME} TEXT," +
+                    "${Episode.COLUMN_NAME_AIR_DATE} TEXT," +
+                    "${Episode.COLUMN_NAME_EPISODE_CODE} TEXT," +
+                    "${Episode.COLUMN_NAME_URL} TEXT," +
+                    "${Episode.COLUMN_NAME_CREATED} TEXT)"
 
 
         private const val SQL_DELETE_CHARACTERS = "DROP TABLE IF EXISTS ${Character.TABLE_NAME}"

@@ -1,6 +1,7 @@
 package com.example.rickymortymza.utils
 
 import com.example.rickymortymza.data.CharacterResponse
+import com.example.rickymortymza.data.EpisodeResponse
 import retrofit2.Response
 
 class CharacterRepository {
@@ -8,6 +9,10 @@ class CharacterRepository {
 
     suspend fun getAllCharacters(page: Int): Response<CharacterResponse> {
         return apiService.getAllCharacters(page)
+    }
+
+    suspend fun getAllEpisodes(page: Int): Response<EpisodeResponse> {
+        return apiService.getAllEpisodes(page)
     }
 
     suspend fun findCharactersByName(name: String): Response<CharacterResponse> {

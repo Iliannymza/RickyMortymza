@@ -30,9 +30,8 @@ class CharacterDao(private val context: Context) {
                 put(Character.COLUMN_NAME_GENDER, character.gender)
                 put(Character.COLUMN_NAME_IMAGE, character.image)
                 put(Character.COLUMN_NAME_TYPE, character.type)
-                put(Character.COLUMN_NAME_ORIGIN, character.origin)
-                put(Character.COLUMN_NAME_LOCATION, character.location)
-                put(Character.COLUMN_NAME_EPISODE, character.episode)
+                put(Character.COLUMN_NAME_ORIGIN, character.origin.name)
+                put(Character.COLUMN_NAME_LOCATION, character.location.name)
                 put(Character.COLUMN_NAME_URL, character.url)
             }
 
@@ -59,9 +58,8 @@ class CharacterDao(private val context: Context) {
                 put(Character.COLUMN_NAME_GENDER, character.gender)
                 put(Character.COLUMN_NAME_IMAGE, character.image)
                 put(Character.COLUMN_NAME_IMAGE, character.type)
-                put(Character.COLUMN_NAME_ORIGIN, character.origin)
-                put(Character.COLUMN_NAME_LOCATION, character.location)
-                put(Character.COLUMN_NAME_EPISODE, character.episode)
+                put(Character.COLUMN_NAME_ORIGIN, character.origin.name)
+                put(Character.COLUMN_NAME_LOCATION, character.location.name)
                 put(Character.COLUMN_NAME_URL, character.url)
             }
 
@@ -80,10 +78,8 @@ class CharacterDao(private val context: Context) {
     // Borrar un personaje
     fun delete(character: Character) {
         open()
-
         try {
             val selection = "${Character.COLUMN_NAME_ID} = ${character.id}"
-
             val deletedRows = db.delete(Character.TABLE_NAME, selection, null)
 
             Log.i("DATABASE", "Deleted character with id: ${character.id}")
@@ -97,9 +93,7 @@ class CharacterDao(private val context: Context) {
     // Borrar un personaje
     fun deleteAll() {
         open()
-
         try {
-
             val deletedRows = db.delete(Character.TABLE_NAME, null, null)
 
             Log.i("DATABASE", "Deleted all character: $deletedRows")
@@ -126,8 +120,7 @@ class CharacterDao(private val context: Context) {
                 Character.COLUMN_NAME_TYPE,
                 Character.COLUMN_NAME_ORIGIN,
                 Character.COLUMN_NAME_LOCATION,
-                Character.COLUMN_NAME_EPISODE,
-                Character.COLUMN_NAME_URL,
+                Character.COLUMN_NAME_URL
             )
 
             val selection = "${Character.COLUMN_NAME_ID} = $id"
@@ -144,18 +137,37 @@ class CharacterDao(private val context: Context) {
 
             if (cursor.moveToNext()) {
                 val localId = cursor.getLong(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_ID))
-                val name = cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_NAME))
-                val status = cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_STATUS))
-                val species = cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_SPECIES))
-                val gender = cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_GENDER))
-                val image = cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_IMAGE))
-                val type = cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_TYPE))
-                val origin = cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_ORIGIN))
-                val location = cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_LOCATION))
-                val episode = cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_EPISODE))
-                val url = cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_URL))
+                val name =
+                    cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_NAME))
+                val status =
+                    cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_STATUS))
+                val species =
+                    cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_SPECIES))
+                val gender =
+                    cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_GENDER))
+                val image =
+                    cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_IMAGE))
+                val type =
+                    cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_TYPE))
+                val origin =
+                    cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_ORIGIN))
+                val location =
+                    cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_LOCATION))
+                val url =
+                    cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_URL))
 
-                character = Character(localId, name, status, species, gender, image, type, origin, location, episode, url)
+                character = Character(
+                    localId,
+                    name,
+                    status,
+                    species,
+                    gender,
+                    image,
+                    type,
+                    Location(origin),
+                    Location(location),
+                    url
+                )
             }
 
             cursor.close()
@@ -167,6 +179,7 @@ class CharacterDao(private val context: Context) {
 
         return character
     }
+
     // Obtener todos los registros
     fun findAll(): List<Character> {
         open()
@@ -183,10 +196,9 @@ class CharacterDao(private val context: Context) {
                 Character.COLUMN_NAME_TYPE,
                 Character.COLUMN_NAME_ORIGIN,
                 Character.COLUMN_NAME_LOCATION,
-                Character.COLUMN_NAME_EPISODE,
                 Character.COLUMN_NAME_URL,
 
-            )
+                )
 
             val cursor = db.query(
                 Character.TABLE_NAME,
@@ -200,18 +212,37 @@ class CharacterDao(private val context: Context) {
 
             while (cursor.moveToNext()) {
                 val localId = cursor.getLong(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_ID))
-                val name = cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_NAME))
-                val status = cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_STATUS))
-                val species = cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_SPECIES))
-                val gender = cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_GENDER))
-                val image = cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_IMAGE))
-                val type = cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_TYPE))
-                val origin = cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_ORIGIN))
-                val location = cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_LOCATION))
-                val episode = cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_EPISODE))
-                val url = cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_URL))
+                val name =
+                    cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_NAME))
+                val status =
+                    cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_STATUS))
+                val species =
+                    cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_SPECIES))
+                val gender =
+                    cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_GENDER))
+                val image =
+                    cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_IMAGE))
+                val type =
+                    cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_TYPE))
+                val origin =
+                    cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_ORIGIN))
+                val location =
+                    cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_LOCATION))
+                val url =
+                    cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_URL))
 
-                val character = Character(localId, name, status, species, gender, image, type, origin, location, episode, url)
+                val character = Character(
+                    localId,
+                    name,
+                    status,
+                    species,
+                    gender,
+                    image,
+                    type,
+                    Location(origin),
+                    Location(location),
+                    url
+                )
                 characterList.add(character)
             }
 
@@ -241,11 +272,11 @@ class CharacterDao(private val context: Context) {
                 Character.COLUMN_NAME_TYPE,
                 Character.COLUMN_NAME_ORIGIN,
                 Character.COLUMN_NAME_LOCATION,
-                Character.COLUMN_NAME_EPISODE,
                 Character.COLUMN_NAME_URL,
             )
 
-            val selection = "${Character.COLUMN_NAME_NAME} LIKE '%$query%' OR ${Character.COLUMN_NAME_SPECIES} LIKE '%$query%'"
+            val selection =
+                "${Character.COLUMN_NAME_NAME} LIKE '%$query%' OR ${Character.COLUMN_NAME_SPECIES} LIKE '%$query%'"
 
             val cursor = db.query(
                 Character.TABLE_NAME,
@@ -259,18 +290,37 @@ class CharacterDao(private val context: Context) {
 
             while (cursor.moveToNext()) {
                 val localId = cursor.getLong(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_ID))
-                val name = cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_NAME))
-                val status = cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_STATUS))
-                val species = cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_SPECIES))
-                val gender = cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_GENDER))
-                val image = cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_IMAGE))
-                val type = cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_TYPE))
-                val origin = cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_ORIGIN))
-                val location = cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_LOCATION))
-                val episode = cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_EPISODE))
-                val url = cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_URL))
+                val name =
+                    cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_NAME))
+                val status =
+                    cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_STATUS))
+                val species =
+                    cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_SPECIES))
+                val gender =
+                    cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_GENDER))
+                val image =
+                    cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_IMAGE))
+                val type =
+                    cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_TYPE))
+                val origin =
+                    cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_ORIGIN))
+                val location =
+                    cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_LOCATION))
+                val url =
+                    cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_URL))
 
-                val character = Character(localId, name, status, species, gender, image, type, origin, location, episode, url)
+                val character = Character(
+                    localId,
+                    name,
+                    status,
+                    species,
+                    gender,
+                    image,
+                    type,
+                    Location(origin),
+                    Location(location),
+                    url
+                )
                 characterList.add(character)
             }
 
@@ -284,6 +334,7 @@ class CharacterDao(private val context: Context) {
         return characterList
     }
 }
+
 
 
 

@@ -22,9 +22,8 @@ data class Character(
     @SerializedName("gender") val gender: String,
     @SerializedName("image") val image: String,
     @SerializedName("type") val type: String,
-    @SerializedName("origin") val origin: Location?,
-    @SerializedName("location") val location: Location?,
-    @SerializedName("episode") val episode: List<String>,
+    @SerializedName("origin") val origin: Location,
+    @SerializedName("location") val location: Location,
     @SerializedName("url") val url: String?
 ) {
     companion object {
@@ -39,7 +38,7 @@ data class Character(
         const val COLUMN_NAME_TYPE = "type"
         const val COLUMN_NAME_ORIGIN = "origin"
         const val COLUMN_NAME_LOCATION = "location"
-        const val COLUMN_NAME_EPISODE = "episode"
+        //const val COLUMN_NAME_EPISODE = "episode"
         const val COLUMN_NAME_URL = "url"
     }
 }
@@ -47,7 +46,7 @@ data class Character(
 //para las ubicaciones (origin y location)
 data class Location(
     @SerializedName("name") val name: String,
-    @SerializedName("url") val url: String
+    @SerializedName("url") val url: String? = null
 )
 
 /*data class CharactersTable (

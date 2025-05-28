@@ -17,7 +17,7 @@ class EpisodeDao(private val context: Context) {
         db.close()
     }
 
-    fun insert(character: Character) {
+    fun insert(episode: Episode) {
         open()
 
         try {
@@ -29,43 +29,13 @@ class EpisodeDao(private val context: Context) {
                 put(Episode.COLUMN_NAME_URL, episode.url)
                 put(Episode.COLUMN_NAME_CREATED, episode.created)
         }
+
             val newRowId = db.insert(Episode.TABLE_NAME, null, values)
+
             Log.i("DATABASE", "Inserted an episode with id: $newRowId")
         } catch (e: Exception) {
             e.printStackTrace()
         } finally {
-            close()
-        }
-
-
-
-    }
-}
-
-
-/*
-fun insertAll(episodes: List<Episode>) {
-        open()
-        db.beginTransaction() // Inicia una transacción para inserciones masivas
-        try {
-            for (episode in episodes) {
-                val values = ContentValues().apply {
-                    put(Episode.COLUMN_NAME_ID, episode.id)
-                    put(Episode.COLUMN_NAME_NAME, episode.name)
-                    put(Episode.COLUMN_NAME_AIR_DATE, episode.air_date)
-                    put(Episode.COLUMN_NAME_EPISODE_CODE, episode.episode)
-                    put(Episode.COLUMN_NAME_URL, episode.url)
-                    put(Episode.COLUMN_NAME_CREATED, episode.created)
-                    put(Episode.COLUMN_NAME_CHARACTERS, gson.toJson(episode.characters))
-                }
-                db.insertWithOnConflict(Episode.TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE)
-            }
-            db.setTransactionSuccessful() // Marca la transacción como exitosa
-            Log.i("DATABASE", "Inserted all episodes successfully.")
-        } catch (e: Exception) {
-            e.printStackTrace()
-        } finally {
-            db.endTransaction() // Finaliza la transacción
             close()
         }
     }
@@ -79,13 +49,14 @@ fun insertAll(episodes: List<Episode>) {
                 put(Episode.COLUMN_NAME_EPISODE_CODE, episode.episode)
                 put(Episode.COLUMN_NAME_URL, episode.url)
                 put(Episode.COLUMN_NAME_CREATED, episode.created)
-                put(Episode.COLUMN_NAME_CHARACTERS, gson.toJson(episode.characters))
+                //put(Episode.COLUMN_NAME_CHARACTERS, episode.characters)
             }
 
-            val selection = "${Episode.COLUMN_NAME_ID} = ?"
-            val selectionArgs = arrayOf(episode.id.toString())
+            val selection = "${Episode.COLUMN_NAME_ID}"
 
-            val count = db.update(Episode.TABLE_NAME, values, selection, selectionArgs)
+
+            val count = db.update(Episode.TABLE_NAME, values, selection, null)
+
             Log.i("DATABASE", "Updated $count rows for episode with id: ${episode.id}")
         } catch (e: Exception) {
             e.printStackTrace()
@@ -97,9 +68,8 @@ fun insertAll(episodes: List<Episode>) {
     fun delete(episode: Episode) {
         open()
         try {
-            val selection = "${Episode.COLUMN_NAME_ID} = ?"
-            val selectionArgs = arrayOf(episode.id.toString())
-            val deletedRows = db.delete(Episode.TABLE_NAME, selection, selectionArgs)
+            val selection = "${Episode.COLUMN_NAME_ID}"
+            val deletedRows = db.delete(Episode.TABLE_NAME, selection, null)
             Log.i("DATABASE", "Deleted $deletedRows rows for episode with id: ${episode.id}")
         } catch (e: Exception) {
             e.printStackTrace()
@@ -112,6 +82,7 @@ fun insertAll(episodes: List<Episode>) {
         open()
         try {
             val deletedRows = db.delete(Episode.TABLE_NAME, null, null)
+
             Log.i("DATABASE", "Deleted all episodes: $deletedRows")
         } catch (e: Exception) {
             e.printStackTrace()
@@ -129,20 +100,21 @@ fun insertAll(episodes: List<Episode>) {
                 Episode.COLUMN_NAME_NAME,
                 Episode.COLUMN_NAME_AIR_DATE,
                 Episode.COLUMN_NAME_EPISODE_CODE,
-                Episode.COLUMN_NAME_CHARACTERS,
                 Episode.COLUMN_NAME_URL,
                 Episode.COLUMN_NAME_CREATED
             )
 
             val selection = "${Episode.COLUMN_NAME_ID} = ?"
-            val selectionArgs = arrayOf(id.toString())
 
             val cursor = db.query(
                 Episode.TABLE_NAME,
                 projection,
                 selection,
-                selectionArgs,
-                null, null, null
+                null,
+                null,
+                null,
+                null,
+                null
             )
 
             if (cursor.moveToNext()) {
@@ -153,12 +125,7 @@ fun insertAll(episodes: List<Episode>) {
                 val url = cursor.getString(cursor.getColumnIndexOrThrow(Episode.COLUMN_NAME_URL))
                 val created = cursor.getString(cursor.getColumnIndexOrThrow(Episode.COLUMN_NAME_CREATED))
 
-                // Recupera el JSON String de los personajes y convierte a List<String>
-                val charactersJson = cursor.getString(cursor.getColumnIndexOrThrow(Episode.COLUMN_NAME_CHARACTERS))
-                val charactersType = object : TypeToken<List<String>>() {}.type
-                val characters: List<String> = gson.fromJson(charactersJson, charactersType) ?: emptyList()
-
-                episode = Episode(localId, name, airDate, episodeCode, characters, url, created)
+                episode = Episode(localId, name, airDate, episodeCode, url, created)
             }
             cursor.close()
         } catch (e: Exception) {
@@ -178,7 +145,6 @@ fun insertAll(episodes: List<Episode>) {
                 Episode.COLUMN_NAME_NAME,
                 Episode.COLUMN_NAME_AIR_DATE,
                 Episode.COLUMN_NAME_EPISODE_CODE,
-                Episode.COLUMN_NAME_CHARACTERS,
                 Episode.COLUMN_NAME_URL,
                 Episode.COLUMN_NAME_CREATED
             )
@@ -197,11 +163,49 @@ fun insertAll(episodes: List<Episode>) {
                 val url = cursor.getString(cursor.getColumnIndexOrThrow(Episode.COLUMN_NAME_URL))
                 val created = cursor.getString(cursor.getColumnIndexOrThrow(Episode.COLUMN_NAME_CREATED))
 
-                val charactersJson = cursor.getString(cursor.getColumnIndexOrThrow(Episode.COLUMN_NAME_CHARACTERS))
-                val charactersType = object : TypeToken<List<String>>() {}.type
-                val characters: List<String> = gson.fromJson(charactersJson, charactersType) ?: emptyList()
+                val episode = Episode(localId, name, airDate, episodeCode, url, created)
+                episodeList.add(episode)
+            }
+            cursor.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            close()
+        }
+        return episodeList
+    }
 
-                val episode = Episode(localId, name, airDate, episodeCode, characters, url, created)
+    fun findAllByName(query: String): List<Episode> {
+        open()
+        val episodeList: MutableList<Episode> = mutableListOf()
+        try {
+            val projection = arrayOf(
+                Episode.COLUMN_NAME_ID,
+                Episode.COLUMN_NAME_NAME,
+                Episode.COLUMN_NAME_AIR_DATE,
+                Episode.COLUMN_NAME_EPISODE_CODE,
+                Episode.COLUMN_NAME_URL,
+                Episode.COLUMN_NAME_CREATED
+            )
+
+            val selection =
+                "${Episode.COLUMN_NAME_NAME} LIKE '%$query%'"
+
+            val cursor = db.query(
+                Episode.TABLE_NAME,
+                projection,
+                selection, null, null, null, null
+            )
+
+            while (cursor.moveToNext()) {
+                val localId = cursor.getLong(cursor.getColumnIndexOrThrow(Episode.COLUMN_NAME_ID))
+                val name = cursor.getString(cursor.getColumnIndexOrThrow(Episode.COLUMN_NAME_NAME))
+                val airDate = cursor.getString(cursor.getColumnIndexOrThrow(Episode.COLUMN_NAME_AIR_DATE))
+                val episodeCode = cursor.getString(cursor.getColumnIndexOrThrow(Episode.COLUMN_NAME_EPISODE_CODE))
+                val url = cursor.getString(cursor.getColumnIndexOrThrow(Episode.COLUMN_NAME_URL))
+                val created = cursor.getString(cursor.getColumnIndexOrThrow(Episode.COLUMN_NAME_CREATED))
+
+                val episode = Episode(localId, name, airDate, episodeCode, url, created)
                 episodeList.add(episode)
             }
             cursor.close()
@@ -213,4 +217,3 @@ fun insertAll(episodes: List<Episode>) {
         return episodeList
     }
 }
- */
