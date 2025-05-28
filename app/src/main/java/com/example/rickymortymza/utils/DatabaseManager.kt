@@ -50,11 +50,16 @@ class DatabaseManager(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
         private const val SQL_DELETE_CHARACTERS = "DROP TABLE IF EXISTS ${Character.TABLE_NAME}"
 
         private const val SQL_DELETE_EPISODES = "DROP TABLE IF EXISTS ${Episode.TABLE_NAME}"
+
+        private const val SQL_DELETE_CHARACTER_EPISODE = "DROP TABLE IF EXISTS ${CharactersEpisodes.TABLE_NAME}"
+
     }
 
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(SQL_CREATE_CHARACTERS)
         db.execSQL(SQL_CREATE_EPISODES)
+        db.execSQL(SQL_CREATE_CHARACTER_EPISODE)
+
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -63,6 +68,7 @@ class DatabaseManager(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
     }
 
     private fun onDestroy(db :SQLiteDatabase){
+        db.execSQL(SQL_DELETE_CHARACTER_EPISODE)
         db.execSQL(SQL_DELETE_CHARACTERS)
         db.execSQL(SQL_DELETE_EPISODES)
     }
