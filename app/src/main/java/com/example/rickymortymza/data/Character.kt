@@ -48,25 +48,3 @@ data class Location(
     @SerializedName("name") val name: String,
     @SerializedName("url") val url: String? = null
 )
-
-/*data class CharactersTable (
-    val id: Long,
-    val apiid: Int,
-    val name: String,
-    val status: String,
-    val species: String,
-    val gender: String,
-    val image: String
-)   {
-    companion object {
-        const val TABLE_NAME = "Characters"
-
-        const val COLUMN_NAME_ID = "id"
-        const val COLUMN_NAME_APIID = "apiid"
-        const val COLUMN_NAME_NAME = "name"
-        const val COLUMN_NAME_STATUS = "status"
-        const val COLUMN_NAME_SPECIES = "species"
-        const val COLUMN_NAME_GENDER = "gender"
-        const val COLUMN_NAME_IMAGE = "image"
-    }
-}*/

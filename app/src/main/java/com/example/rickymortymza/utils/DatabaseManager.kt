@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.example.rickymortymza.data.Character
+import com.example.rickymortymza.data.CharactersEpisodes
 import com.example.rickymortymza.data.Episode
 
 class DatabaseManager(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION  ){
@@ -32,6 +33,18 @@ class DatabaseManager(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
                     "${Episode.COLUMN_NAME_EPISODE_CODE} TEXT," +
                     "${Episode.COLUMN_NAME_URL} TEXT," +
                     "${Episode.COLUMN_NAME_CREATED} TEXT)"
+
+        private const val SQL_CREATE_CHARACTER_EPISODE =
+            "CREATE TABLE ${CharactersEpisodes.TABLE_NAME} (" +
+                    "${CharactersEpisodes.COLUMN_NAME_CHARACTER_ID} INTEGER," +
+                    "${CharactersEpisodes.COLUMN_NAME_CHARACTER_ID} INTEGER," +
+                    "PRIMARY KEY (${CharactersEpisodes.COLUMN_NAME_CHARACTER_ID}, " +
+                    "${CharactersEpisodes.COLUMN_NAME_EPISODE_ID})," +
+                    "FOREIGN KEY(${CharactersEpisodes.COLUMN_NAME_CHARACTER_ID}) " +
+                    "REFERENCES " + "${Character.TABLE_NAME}(${Character.COLUMN_NAME_ID}) " +
+                    "ON DELETE CASCADE," + "FOREIGN KEY(${CharactersEpisodes.COLUMN_NAME_EPISODE_ID}) " +
+                    "REFERENCES " + "${Episode.TABLE_NAME}(${Episode.COLUMN_NAME_ID}) ON DELETE CASCADE)"
+
 
 
         private const val SQL_DELETE_CHARACTERS = "DROP TABLE IF EXISTS ${Character.TABLE_NAME}"

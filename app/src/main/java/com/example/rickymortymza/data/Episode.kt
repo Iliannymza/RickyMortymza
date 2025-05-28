@@ -23,7 +23,6 @@ data class Episode(
         const val COLUMN_NAME_NAME = "name"
         const val COLUMN_NAME_AIR_DATE = "air_date"
         const val COLUMN_NAME_EPISODE_CODE = "episode_code" // Cambio de nombre para claridad
-        //const val COLUMN_NAME_CHARACTERS = "characters"
         const val COLUMN_NAME_URL = "url"
         const val COLUMN_NAME_CREATED = "created"
     }

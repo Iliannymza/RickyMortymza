@@ -49,7 +49,6 @@ class EpisodeDao(private val context: Context) {
                 put(Episode.COLUMN_NAME_EPISODE_CODE, episode.episode)
                 put(Episode.COLUMN_NAME_URL, episode.url)
                 put(Episode.COLUMN_NAME_CREATED, episode.created)
-                //put(Episode.COLUMN_NAME_CHARACTERS, episode.characters)
             }
 
             val selection = "${Episode.COLUMN_NAME_ID}"
