@@ -56,16 +56,7 @@ class MainActivity : AppCompatActivity() {
 
         characterAdapter = CharacterAdapter(characterList) { character ->
             val intent = Intent(this, CharacterDetailActivity::class.java).apply {
-                putExtra("character_id", character.id)
-                putExtra("character_name", character.name)
-                putExtra("character_status", character.status)
-                putExtra("character_species", character.species)
-                putExtra("character_gender", character.gender)
-                putExtra("character_image", character.image)
-                //putExtra("character_image", character.type)
-                //putExtra("character_image", character.origin)
-                //putExtra("character_image", character.location)
-                //putExtra("character_image", character.url)
+                putExtra("selected_character", character)
             }
             startActivity(intent)
         }
@@ -74,9 +65,7 @@ class MainActivity : AppCompatActivity() {
 
         episodeAdapter = EpisodeAdapter(episodeList) { episode ->
             val intent = Intent(this, CharacterDetailActivity::class.java).apply {
-                putExtra("character_id", episode.id)
-                putExtra("character_name", episode.name)
-                putExtra("character_image", episode.url)
+                putExtra("selected_episode", episode)
             }
             startActivity(intent)
         }

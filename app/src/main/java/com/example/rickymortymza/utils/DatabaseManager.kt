@@ -10,7 +10,7 @@ import com.example.rickymortymza.data.Episode
 class DatabaseManager(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION  ){
     companion object {
         const val DATABASE_NAME = "rick_and_morty_db"
-        const val DATABASE_VERSION = 2
+        const val DATABASE_VERSION = 3
 
         private const val SQL_CREATE_CHARACTERS =
             "CREATE TABLE ${Character.TABLE_NAME} (" +

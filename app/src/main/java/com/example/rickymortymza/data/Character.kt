@@ -23,6 +23,7 @@ data class Character(
     @SerializedName("image") val image: String,
     @SerializedName("type") val type: String,
     @SerializedName("origin") val origin: Location,
+    @SerializedName("origin") val episode: List<String>,
     @SerializedName("location") val location: Location,
     @SerializedName("url") val url: String?
 ) {

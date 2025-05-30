@@ -32,7 +32,7 @@ class CharacterDetailActivity: AppCompatActivity() {
 
         characterDao = CharacterDao(this)
 
-        val characterId = intent.getIntExtra("character_id", -1)
+        val seletedCharacter =intent.getIntExtra("character_id", -1)
         val  characterName = intent.getStringExtra("character_name") ?: "Nombre Desconocido"
         val  characterStatus = intent.getStringExtra("character_status") ?: "Desconocido"
         val  characterSpecies = intent.getStringExtra("character_species") ?: "Desconocida"

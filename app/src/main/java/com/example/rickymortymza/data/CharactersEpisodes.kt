@@ -2,7 +2,7 @@ package com.example.rickymortymza.data
 
 data class CharactersEpisodes(
     val characterId: Long,
-    val episodeID: Long
+    val episodeId: Long
 ) {
     companion object {
         const val TABLE_NAME = "character_episode"
