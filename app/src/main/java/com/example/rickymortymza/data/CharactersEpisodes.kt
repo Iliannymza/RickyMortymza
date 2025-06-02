@@ -1,9 +1,11 @@
 package com.example.rickymortymza.data
 
+import java.io.Serializable
+
 data class CharactersEpisodes(
     val characterId: Long,
     val episodeId: Long
-) {
+) : Serializable{
     companion object {
         const val TABLE_NAME = "character_episode"
 

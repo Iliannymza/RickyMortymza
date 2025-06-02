@@ -3,4 +3,5 @@
 
     //Despues de crear el icono en drawable, debemos nombrarlo aca
     <string name="menu_search">Search</string>
+
 </resources>

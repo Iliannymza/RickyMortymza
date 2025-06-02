@@ -103,7 +103,7 @@ class EpisodeDao(private val context: Context) {
                 Episode.COLUMN_NAME_CREATED
             )
 
-            val selection = "${Episode.COLUMN_NAME_ID} = ?"
+            val selection = "${Episode.COLUMN_NAME_ID} = $id"
 
             val cursor = db.query(
                 Episode.TABLE_NAME,
@@ -153,6 +153,35 @@ class EpisodeDao(private val context: Context) {
                 projection,
                 null, null, null, null, null
             )
+
+            while (cursor.moveToNext()) {
+                val localId = cursor.getLong(cursor.getColumnIndexOrThrow(Episode.COLUMN_NAME_ID))
+                val name = cursor.getString(cursor.getColumnIndexOrThrow(Episode.COLUMN_NAME_NAME))
+                val airDate = cursor.getString(cursor.getColumnIndexOrThrow(Episode.COLUMN_NAME_AIR_DATE))
+                val episodeCode = cursor.getString(cursor.getColumnIndexOrThrow(Episode.COLUMN_NAME_EPISODE_CODE))
+                val url = cursor.getString(cursor.getColumnIndexOrThrow(Episode.COLUMN_NAME_URL))
+                val created = cursor.getString(cursor.getColumnIndexOrThrow(Episode.COLUMN_NAME_CREATED))
+
+                val episode = Episode(localId, name, airDate, episodeCode, url, created)
+                episodeList.add(episode)
+            }
+            cursor.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            close()
+        }
+        return episodeList
+    }
+
+    fun findAllByCharacterId(characterId: Long): List<Episode> {
+        open()
+        val episodeList: MutableList<Episode> = mutableListOf()
+        try {
+            val rawQuery = "SELECT * FROM ${Episode.TABLE_NAME} INNER JOIN ${CharactersEpisodes.TABLE_NAME} ON ${Episode.COLUMN_NAME_ID} = ${CharactersEpisodes.COLUMN_NAME_EPISODE_ID} WHERE ${CharactersEpisodes.COLUMN_NAME_CHARACTER_ID} = $characterId"
+
+
+            val cursor = db.rawQuery(rawQuery, null)
 
             while (cursor.moveToNext()) {
                 val localId = cursor.getLong(cursor.getColumnIndexOrThrow(Episode.COLUMN_NAME_ID))

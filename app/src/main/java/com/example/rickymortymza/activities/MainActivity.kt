@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
 
         characterAdapter = CharacterAdapter(characterList) { character ->
             val intent = Intent(this, CharacterDetailActivity::class.java).apply {
-                putExtra("selected_character", character)
+                putExtra("selected_character_id", character.id)
             }
             startActivity(intent)
         }
@@ -64,8 +64,8 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerViewCharacters.adapter = characterAdapter
 
         episodeAdapter = EpisodeAdapter(episodeList) { episode ->
-            val intent = Intent(this, CharacterDetailActivity::class.java).apply {
-                putExtra("selected_episode", episode)
+            val intent = Intent(this, EpisodeDetailActivity::class.java).apply { // se cambia por episodeDetail
+                putExtra("selected_episode_id", episode.id)
             }
             startActivity(intent)
         }

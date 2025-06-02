@@ -257,6 +257,63 @@ class CharacterDao(private val context: Context) {
     }
 
     // Obtener todos los registros
+    fun findAllByEpisodeId(episodeId: Long): List<Character> {
+        open()
+
+        val characterList: MutableList<Character> = mutableListOf()
+        try {
+            val rawQuery = "SELECT * FROM ${Character.TABLE_NAME} INNER JOIN ${CharactersEpisodes.TABLE_NAME} ON ${Character.COLUMN_NAME_ID} = ${CharactersEpisodes.COLUMN_NAME_CHARACTER_ID} WHERE ${CharactersEpisodes.COLUMN_NAME_EPISODE_ID} = $episodeId"
+
+
+            val cursor = db.rawQuery(rawQuery, null)
+
+            while (cursor.moveToNext()) {
+                val localId = cursor.getLong(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_ID))
+                val name =
+                    cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_NAME))
+                val status =
+                    cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_STATUS))
+                val species =
+                    cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_SPECIES))
+                val gender =
+                    cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_GENDER))
+                val image =
+                    cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_IMAGE))
+                val type =
+                    cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_TYPE))
+                val origin =
+                    cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_ORIGIN))
+                val location =
+                    cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_LOCATION))
+                val url =
+                    cursor.getString(cursor.getColumnIndexOrThrow(Character.COLUMN_NAME_URL))
+
+                val character = Character(
+                    localId,
+                    name,
+                    status,
+                    species,
+                    gender,
+                    image,
+                    type,
+                    Location(origin),
+                    Location(location),
+                    url
+                )
+                characterList.add(character)
+            }
+
+            cursor.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            close()
+        }
+
+        return characterList
+    }
+
+    // Obtener todos los registros
     fun findAllByName(query: String): List<Character> {
         open()
 

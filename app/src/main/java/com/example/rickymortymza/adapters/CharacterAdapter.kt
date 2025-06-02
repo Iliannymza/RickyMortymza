@@ -26,24 +26,22 @@ class CharacterAdapter(
         val character = items[position]
         holder.render(character)
 
-// Configuramos el click listener para el item completo
         holder.itemView.setOnClickListener {
             onItemClick(character)
         }
     }
 
-    // metodo publico para actualizar los datos del adapter
     fun updateItems(items: List<Character>) {
-        this.items = items // Reemplaza la lista actual con la nueva lista
-        notifyDataSetChanged() // Notifica al RecyclerView que los datos han cambiado y debe redibujarse
+        this.items = items
+        notifyDataSetChanged()
     }
 }
 
 class CharacterViewHolder(val binding: ItemCharacterBinding) : RecyclerView.ViewHolder(binding.root) {
 
-    // la funcion render ahora toma un objeto Character
+
     fun render(character: Character) {
-        //asignamos los datos de la vista a traves del binding
+
         binding.textViewName.text = character.name
         binding.textViewStatusSpecies.text = "${character.status} - ${character.species}"
         binding.textViewGender.text = character.gender

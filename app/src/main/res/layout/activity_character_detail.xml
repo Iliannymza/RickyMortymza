@@ -22,7 +22,7 @@
         android:id="@+id/detailImageProgressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/detailImageViewCharacter"
         app:layout_constraintEnd_toEndOf="@id/detailImageViewCharacter"
         app:layout_constraintStart_toStartOf="@id/detailImageViewCharacter"
@@ -32,39 +32,76 @@
         android:id="@+id/detailTextViewName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="Character Name"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:textColor="@android:color/black"
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/detailImageViewCharacter"
-        tools:text="Rick Sanchez" />
+        app:layout_constraintTop_toBottomOf="@id/detailImageViewCharacter" />
 
     <TextView
         android:id="@+id/detailTextViewStatusSpecies"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:text="Status - Species"
         android:textSize="18sp"
         android:textColor="@android:color/darker_gray"
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/detailTextViewName"
-        tools:text="Alive - Human" />
+        app:layout_constraintTop_toBottomOf="@id/detailTextViewName" />
 
     <TextView
         android:id="@+id/detailTextViewGender"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:text="Gender"
         android:textSize="18sp"
         android:textColor="@android:color/darker_gray"
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/detailTextViewStatusSpecies"
-        tools:text="Male" />
+        app:layout_constraintTop_toBottomOf="@id/detailTextViewStatusSpecies" />
+
+
+
+
+
+
+    <TextView
+        android:id="@+id/labelCharacterEpisodes"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="Episodes:"
+        android:textSize="18sp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/detailTextViewGender" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewCharacterEpisodes"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/labelCharacterEpisodes"
+        tools:listitem="@layout/item_episode" />
 </androidx.constraintlayout.widget.ConstraintLayout>

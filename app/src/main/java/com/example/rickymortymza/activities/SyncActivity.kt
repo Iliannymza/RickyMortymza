@@ -208,15 +208,16 @@ class SyncActivity : AppCompatActivity() {
     private fun extractIdFromUrl(url: String): Long? {
         return try {
             url.substringAfterLast('/').toLong()
+            //url.split("/").last()
         } catch (e: Exception) {
             Log.e("SyncActivity", "Error extracting ID from URL: $url", e)
             null
         }
     }
 
-private fun goToHome() {
-    val intent = Intent(this, MainActivity::class.java)
-    startActivity(intent)
-    finish()
+    private fun goToHome() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }

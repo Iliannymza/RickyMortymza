@@ -1,12 +1,19 @@
 package com.example.rickymortymza.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.rickymortymza.adapters.EpisodeAdapter
+import com.example.rickymortymza.data.Character
 import com.example.rickymortymza.data.CharacterDao
+import com.example.rickymortymza.data.CharactersEpisodesDao
+import com.example.rickymortymza.data.Episode
+import com.example.rickymortymza.data.EpisodeDao
 import com.example.rickymortymza.databinding.ActivityCharacterDetailBinding
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
@@ -16,6 +23,15 @@ class CharacterDetailActivity: AppCompatActivity() {
     private lateinit var binding: ActivityCharacterDetailBinding
 
     lateinit var characterDao: CharacterDao
+
+   lateinit var charactersEpisodesDao: CharactersEpisodesDao
+
+   lateinit var episodeDao: EpisodeDao
+
+   private lateinit var episodesOfCharacterAdapter: EpisodeAdapter
+
+   lateinit var character: Character
+   lateinit var episodes: List<Episode>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,26 +46,32 @@ class CharacterDetailActivity: AppCompatActivity() {
             insets
         }
 
+
         characterDao = CharacterDao(this)
+        charactersEpisodesDao = CharactersEpisodesDao(this)
+        episodeDao = EpisodeDao(this)
 
-        val seletedCharacter =intent.getIntExtra("character_id", -1)
-        val  characterName = intent.getStringExtra("character_name") ?: "Nombre Desconocido"
-        val  characterStatus = intent.getStringExtra("character_status") ?: "Desconocido"
-        val  characterSpecies = intent.getStringExtra("character_species") ?: "Desconocida"
-        val  characterGender = intent.getStringExtra("character_gender") ?: "Desconocido"
-        val  characterImage = intent.getStringExtra("character_image")
-        val  characterType = intent.getStringExtra("character_type")
-        val  characterOrigin = intent.getStringExtra("character_origin")
-        val  characterLocation = intent.getStringExtra("character_location")
-        val  characterEpisode = intent.getStringExtra("character_episode")
-        val  characterUrl = intent.getStringExtra("character_url")
+        val seletedCharacter = intent.getLongExtra("selected_character_id", -1)
 
-        binding.detailTextViewName.text = characterName
-        binding.detailTextViewStatusSpecies.text = "$characterStatus - $characterSpecies"
-        binding.detailTextViewGender.text = characterGender
+        character = characterDao.findById(seletedCharacter)!!
+        episodes = episodeDao.findAllByCharacterId(seletedCharacter)
+
+        episodesOfCharacterAdapter = EpisodeAdapter(episodes){ episode ->
+            val intent = Intent(this, EpisodeDetailActivity::class.java).apply { // se cambia por episodeDetail
+                putExtra("selected_episode_id", episode.id)
+            }
+            startActivity(intent)
+        }
+
+        binding.recyclerViewCharacterEpisodes.adapter = episodesOfCharacterAdapter
+        binding.recyclerViewCharacterEpisodes.layoutManager = LinearLayoutManager(this)
+
+        binding.detailTextViewName.text = character.name
+        binding.detailTextViewStatusSpecies.text = "${character.status} - ${character.species}"
+        binding.detailTextViewGender.text = character.gender
 
         //Cargar imagenes con picasso
-        characterImage?.let { imageUrl ->
+        character.image?.let { imageUrl ->
             binding.detailImageProgressBar.visibility = View.VISIBLE
             Picasso.get()
                 .load(imageUrl)
@@ -62,22 +84,17 @@ class CharacterDetailActivity: AppCompatActivity() {
 
                     override fun onError(e: Exception?) {
                         binding.detailImageProgressBar.visibility = View.GONE
-                        // Opcional: mostrar un Toast o mensaje de error
                     }
                 })
         } ?: run {
-            // Si characterImage es nulo, oculta el ProgressBar inmediatamente y no carga imagen
             binding.detailImageProgressBar.visibility = View.GONE
-            // Puedes establecer una imagen por defecto si la URL es nula
             binding.detailImageViewCharacter.setImageResource(android.R.drawable.ic_menu_gallery)
         }
 
-        // Habilita el botón de retroceso en la Toolbar
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = characterName // Asegúrate de que characterName no sea null para el título
+        supportActionBar?.title = character.name // Asegúrate de que characterName no sea null para el título
     }
 
-    // Maneja el clic en el botón de retroceso de la Toolbar
     override fun onSupportNavigateUp(): Boolean {
         onBackPressedDispatcher.onBackPressed()
         return true

@@ -37,7 +37,7 @@ class DatabaseManager(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
         private const val SQL_CREATE_CHARACTER_EPISODE =
             "CREATE TABLE ${CharactersEpisodes.TABLE_NAME} (" +
                     "${CharactersEpisodes.COLUMN_NAME_CHARACTER_ID} INTEGER," +
-                    "${CharactersEpisodes.COLUMN_NAME_CHARACTER_ID} INTEGER," +
+                    "${CharactersEpisodes.COLUMN_NAME_EPISODE_ID} INTEGER," +
                     "PRIMARY KEY (${CharactersEpisodes.COLUMN_NAME_CHARACTER_ID}, " +
                     "${CharactersEpisodes.COLUMN_NAME_EPISODE_ID})," +
                     "FOREIGN KEY(${CharactersEpisodes.COLUMN_NAME_CHARACTER_ID}) " +

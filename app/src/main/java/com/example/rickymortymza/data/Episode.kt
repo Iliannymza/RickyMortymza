@@ -1,6 +1,7 @@
 package com.example.rickymortymza.data
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class EpisodeResponse(
     @SerializedName("info") val info: Info,
@@ -15,7 +16,7 @@ data class Episode(
     @SerializedName("url") val url: String,
     @SerializedName("created") val created: String,
     @SerializedName("characters") val characters: List<String> = emptyList()
-) {
+) : Serializable {
     companion object {
         const val TABLE_NAME = "episodes"
 
